@@ -1,4 +1,2 @@
-Backbone-Notes
-==============
-
-Notes. Single page application
+Chrome Notes
+============
