@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Notes",
+  "description": "Like a simple notepad which will be synced between all yours Chrome instances (Eg. Home, Work).",
+  "version": "0.1",
+  "offline_enabled": true,
+    "permissions": [
+    "http://antonkuzmenko.net/",
+    "storage",
+    "unlimitedStorage"
+  ],
+  "icons": { "16": "icons/icon16.png", "128": "icons/icon128.png" },
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  }
+}

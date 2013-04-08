@@ -1,0 +1,132 @@
+[class^="icon-"],
+[class*=" icon-"] {
+    background-image: url("/img/glyphicons-halflings.png");
+}
+
+/* White icons with optional class, or on hover/focus/active states of certain elements */
+
+.icon-white,
+.nav-pills > .active > a > [class^="icon-"],
+.nav-pills > .active > a > [class*=" icon-"],
+.nav-list > .active > a > [class^="icon-"],
+.nav-list > .active > a > [class*=" icon-"],
+.navbar-inverse .nav > .active > a > [class^="icon-"],
+.navbar-inverse .nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:focus > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > li > a:focus > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"],
+.dropdown-submenu:hover > a > [class^="icon-"],
+.dropdown-submenu:focus > a > [class^="icon-"],
+.dropdown-submenu:hover > a > [class*=" icon-"],
+.dropdown-submenu:focus > a > [class*=" icon-"] {
+    background-image: url("/img/glyphicons-halflings-white.png");
+}
+
+.btn.dropdown-toggle {
+    /*padding: 4px 10px;*/
+}
+
+.container-main {
+    max-width: 900px;
+}
+
+.masthead > h3 a {
+    color: #5a5a5a;
+    text-decoration: none;
+}
+
+.folders > hr {
+    margin: 10px 0;
+}
+
+.input-large {
+    max-width: 300px;
+}
+
+.dropdown-menu {
+    min-width: 100px;
+}
+
+/* NOTES */
+
+#notes > .row-fluid > h4 {
+    margin: 0;
+}
+
+#notes > .row-fluid > h4 > a {
+    color: #656565;
+    text-decoration: none;
+    display: block;
+    padding: 10px 0 10px 10px;
+}
+
+#notes > .row-fluid > .actions {
+    float: right;
+    margin: 6px 0;
+}
+
+#notes > .row-fluid:hover {
+    background-color: #eeeeee;
+}
+
+#notes > .row-fluid.new-note-wrapper:hover {
+    background: none;
+}
+
+/* FOLDERS */
+
+#new-folder {
+    margin-bottom: 10px;
+}
+
+.folders .row-fluid.new-folder-wrapper:hover {
+    background: none;
+}
+
+#folders > .row-fluid input[type=text] {
+    display: none;
+}
+
+#folders > .row-fluid.edit input[type=text] {
+    display: block;
+    position: relative;
+    top: 6px;
+    left: 10px;
+}
+
+#folders > .row-fluid.edit h4 {
+    display: none;
+}
+
+.folders .row-fluid h4 > a {
+    color: #656565;
+    text-decoration: none;
+    display: block;
+    padding: 10px 0 10px 10px;
+}
+
+.folders .row-fluid:hover {
+    background-color: #eeeeee;
+}
+
+.folders .row-fluid h4 {
+    margin: 0;
+}
+
+#folders > .row-fluid .btn-group {
+    float: right;
+    margin: 6px 0;
+}
+
+.form-confirm {
+    width: 400px;
+}
+
+#form-add-folder,
+#form-add-note {
+    width: 315px;
+    margin-left: -162px;
+}

@@ -1,0 +1,1 @@
+new @app.View.App
