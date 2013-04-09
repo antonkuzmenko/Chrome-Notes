@@ -1,3 +1,5 @@
+app = window.app
+
 Folder = Backbone.Model.extend
   defaults: ->
     title: ''
@@ -18,3 +20,5 @@ Folder::hasMany = ->
     collection: app.Collection.Notes
     id: 'folder_id'
     filter: (note) -> +note.get('folder_id') is +@id
+
+app.Model.Folder = Folder

@@ -1,9 +1,11 @@
-app = @app
+app = window.app
 
-app.Folders = Backbone.Collection.extend
+Folders = Backbone.Collection.extend
   model: app.Model.Folder
-  localStorage: new Backbone.LocalStorage 'folders'
+#  localStorage: new Backbone.LocalStorage 'folders'
 
   initialize: ->
     @on 'all', (event) -> console.log event, 'Folder event'
     @fetch()
+
+app.Collection.Folders = new Folders

@@ -2,15 +2,16 @@
 (function() {
   var app;
 
-  app = this.app;
+  app = window.app;
 
   app.View.Note = Backbone.View.extend({
     className: 'row-fluid',
     $notesWrapper: $('#notes'),
-    templates: {
-      noteItem: _.templates($('#note-item').html())
+    Templates: {
+      noteItem: app.Template.Note.noteItem
     },
     initialize: function() {
+      console.log(this.Templates.noteItem);
       this.model.view = this;
       this.render().$el.appendTo(this.$notesWrapper);
       return this.listenEvents();
@@ -21,7 +22,7 @@
       return this;
     },
     render: function() {
-      this.$el.html(this.templates.noteItem(this.model.toJSON()));
+      this.$el.html(this.Templates.noteItem(this.model.toJSON()));
       return this;
     }
   });

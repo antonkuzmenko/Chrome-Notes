@@ -1,14 +1,15 @@
-app = @app
+app = window.app
 
 app.View.Note = Backbone.View.extend
   className: 'row-fluid'
 
   $notesWrapper: $ '#notes'
 
-  templates:
-    noteItem: _.templates $('#note-item').html()
+  Templates:
+    noteItem: app.Template.Note.noteItem
 
   initialize: ->
+    console.log @Templates.noteItem
     @model.view = @
     @render().$el.appendTo @$notesWrapper
     @listenEvents()
@@ -19,5 +20,5 @@ app.View.Note = Backbone.View.extend
     @
 
   render: ->
-    @$el.html @templates.noteItem @model.toJSON()
+    @$el.html @Templates.noteItem @model.toJSON()
     @

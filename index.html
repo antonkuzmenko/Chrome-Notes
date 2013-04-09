@@ -79,6 +79,13 @@
     </div>
 </script>
 
+<script id="folders-select-list" type="text/template">
+    <% _.each(folders, function(folder, index) { %>
+        <option value="<%= folder.id %>"><%= folder.title %></option>
+        <%= index %>
+    <% }); %>
+</script>
+
 <!-- Note creation form -->
 <div id="form-add-note" class="modal hide fade form-add-note" tabindex="-1" role="dialog" aria-labelledby="addNoteLabel" aria-hidden="true">
     <div class="modal-header">

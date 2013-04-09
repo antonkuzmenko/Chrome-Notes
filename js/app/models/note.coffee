@@ -1,6 +1,6 @@
-app = @app
+app = window.app
 
-app.Model.Note = Backbone.Model.extend
+Note = Backbone.Model.extend
   defaults: ->
     title: ''
     body: ''
@@ -15,4 +15,6 @@ app.Model.Note = Backbone.Model.extend
     @on 'remove', @destroy, @
     @on 'remove', @clear, @
 
-app.Model::belongsTo = -> folder: app.Collection.Folders
+Note::belongsTo = -> folder: app.Collection.Folders
+
+app.Model.Note = Note

@@ -2,27 +2,26 @@
 (function() {
   var app;
 
-  app = this.app;
+  app = window.app;
 
   app.View.Folder = Backbone.View.extend({
-    className: 'row-fluid'
-  }, events({
-    'keyup input': 'save',
-    'blur input': 'save',
-    'click a.edit-link': 'edit',
-    'click button.delete': 'destroy'
-  }), {
+    className: 'row-fluid',
+    events: {
+      'keyup input': 'save',
+      'blur input': 'save',
+      'click a.edit-link': 'edit',
+      'click button.delete': 'destroy'
+    },
     $foldersWrapper: $('#folders'),
-    templates: {
-      listItem: _.templates($('#folder-item').html()),
-      formConfirm: _.templates($('#form-folder-confirm').html())
+    Templates: {
+      listItem: app.Template.Folder.listItem,
+      formConfirm: app.Template.Folder.formConfirm
     },
     initialize: function() {
       this.$input = null;
       this.model.view = this;
       this.render().$el.appendTo(this.$foldersWrapper);
-      this.listenEvents();
-      return this;
+      return this.listenEvents();
     },
     listenEvents: function() {
       this.listenTo(this.model, 'change:title', this.render);
@@ -50,20 +49,21 @@
       return this.model.collection.remove(this.model);
     },
     render: function() {
-      this.$el.html(this.templates.listItem(this.model.toJSON() + this.$el.html(this.templates.formConfirm(this.model.toJSON()))));
+      this.$el.html(this.Templates.listItem(this.model.toJSON() + this.$el.html(this.Templates.formConfirm(this.model.toJSON()))));
       if (this.$input != null) {
         this.$input.remove();
       }
       this.$input = this.$('input');
       return this;
+    },
+    remove: function() {
+      Backbone.View.prototype.remove.apply(this, arguments);
+      this.$input.remove();
+      delete this.options.model;
+      delete this.model.view;
+      delete this.model;
+      return this;
     }
-  }, remove(function() {
-    Backbone.View.prototype.remove.apply(this, arguments);
-    this.$input.remove();
-    delete this.options.model;
-    delete this.model.view;
-    delete this.model;
-    return this;
-  }));
+  });
 
 }).call(this);

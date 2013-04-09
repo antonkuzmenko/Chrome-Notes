@@ -2,12 +2,16 @@
 (function() {
   var iterator;
 
-  this.app = {
+  window.app = {
     Model: {},
     Collection: {},
     View: {},
     Mixin: {},
-    Iterator: {}
+    Iterator: {},
+    Template: {
+      Folder: {},
+      Note: {}
+    }
   };
 
   iterator = (function() {
@@ -29,9 +33,9 @@
     };
   })();
 
-  this.app.Iterator.folder = iterator();
+  window.app.Iterator.folder = iterator();
 
-  this.app.Iterator.note = iterator();
+  window.app.Iterator.note = iterator();
 
   Backbone.Model.prototype.toJSON = function() {
     var _ref;
@@ -41,6 +45,8 @@
     }));
   };
 
-  this.$ = jQuery;
+  Backbone.LocalStorage.prototype.localStorage(function() {
+    return chrome.storage.local;
+  });
 
 }).call(this);

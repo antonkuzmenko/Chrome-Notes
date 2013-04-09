@@ -1,8 +1,8 @@
-app = @app
+app = window.app
 
 app.View.Folder = Backbone.View.extend
   className: 'row-fluid'
-  events
+  events:
     'keyup input': 'save'
     'blur input': 'save'
     'click a.edit-link': 'edit'
@@ -10,16 +10,15 @@ app.View.Folder = Backbone.View.extend
 
   $foldersWrapper: $ '#folders'
 
-  templates:
-    listItem: _.templates $('#folder-item').html()
-    formConfirm: _.templates $('#form-folder-confirm').html()
+  Templates:
+    listItem: app.Template.Folder.listItem
+    formConfirm: app.Template.Folder.formConfirm
 
   initialize: ->
     @$input = null
     @model.view = @
-    @render().$el.appendTo @.$foldersWrapper
+    @render().$el.appendTo @$foldersWrapper
     @listenEvents()
-    @
 
   listenEvents: ->
     @listenTo @model, 'change:title', @render
@@ -45,14 +44,14 @@ app.View.Folder = Backbone.View.extend
   destroy: -> @model.collection.remove @model
 
   render: ->
-    @$el.html @templates.listItem @model.toJSON() +
-    @$el.html @templates.formConfirm @model.toJSON()
+    @$el.html @Templates.listItem @model.toJSON() +
+    @$el.html @Templates.formConfirm @model.toJSON()
 
     @$input.remove() if @$input?
     @$input = @$ 'input'
     @
 
-  remove () ->
+  remove: () ->
     Backbone.View::remove.apply @, arguments
 
     @$input.remove()

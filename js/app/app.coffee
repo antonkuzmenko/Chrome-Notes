@@ -1,1 +1,1 @@
-new @app.View.App
+new window.app.View.App

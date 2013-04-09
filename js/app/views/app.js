@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = this.app;
+  app = window.app;
 
   app.View.App = Backbone.View.extend({
     Forms: {
@@ -17,8 +17,63 @@
         $foldersList: $('#new-note-folder')
       }
     },
-    templates: {
-      noteFoldersList: _.template("<% _.each(folders, function(folder, index) { %><option value=\"<%= folder.id %>\"><%= folder.title %></option><%= index %><% }); %>")
+    Templates: {
+      foldersSelectList: app.Template.Note.foldersSelectList
+    },
+    initialize: function() {
+      this.addFolder = _.bind(this.addFolder, this);
+      this.addNote = _.bind(this.addNote, this);
+      this.Forms.Folder.$el.on('hidden', this.clearFolder).on('shown', this.focusFolderTitle).on('click', '.add-folder', this.addFolder);
+      this.Forms.Folder.$title.on('keyup', this.addFolder);
+      this.Forms.Note.$el.on('hidden', this.clearNote).on('shown', this.focusNoteTitle).on('click', '.add-note', this.addNote);
+      this.renderFoldersSelectList;
+      return this.listenEvents();
+    },
+    listenEvents: function() {
+      this.listenTo(app.Collection.Folders, 'remove add change:title', this.renderFoldersSelectList);
+    },
+    addFolder: function(event) {
+      var folder;
+
+      if (event.type === 'keyup' && event.which !== 13) {
+        return;
+      }
+      folder = new app.Model.Folder({
+        title: this.Forms.Folder.$title.val()
+      });
+      app.Collection.Folders.add(folder);
+      folder.save();
+      return this.Forms.Folder.$el.modal('hide');
+    },
+    focusFolderTitle: function() {
+      return this.Forms.Folder.$title.val('');
+    },
+    clearFolder: function() {
+      return this.Forms.Folder.$title.val('');
+    },
+    addNote: function() {
+      app.Collection.Notes.add({
+        title: this.Forms.Note.$title.val(),
+        body: this.Forms.Note.$body.val(),
+        folder_id: this.Forms.Note.$foldersList.val()
+      });
+      return this.Forms.Note.$el.modal('hide');
+    },
+    focusNoteTitle: function() {
+      return this.Forms.Note.$title.focus();
+    },
+    clearNote: function() {
+      this.Forms.Note.$title.val('');
+      return this.Forms.Note.$body.val('');
+    },
+    renderFoldersSelectList: function() {
+      var folders;
+
+      folders = this.Templates.foldersSelectList({
+        folders: app.Collection.Folders.toJSON()
+      });
+      this.Forms.Note.$foldersList.html(folders);
+      return this;
     }
   });
 

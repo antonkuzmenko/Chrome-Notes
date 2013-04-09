@@ -6,14 +6,11 @@
 
   app.runtime.onLaunched.addListener(function() {
     return app.window.create('index.html', {
-      bounds: {
-        width: 600,
-        height: 400,
-        left: 0,
-        top: 0
-      },
-      minWidth: 500,
-      minHeight: 400
+      defaultWidth: 800,
+      minWidth: 600,
+      defaultHeight: 400,
+      minHeight: 400,
+      id: 'chrome-notes'
     });
   });
 
