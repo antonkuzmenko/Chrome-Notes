@@ -45,8 +45,4 @@
     }));
   };
 
-  Backbone.LocalStorage.prototype.localStorage(function() {
-    return chrome.storage.local;
-  });
-
 }).call(this);

@@ -23,6 +23,3 @@ window.app.Iterator.note = iterator()
 # Used in views and sync with the server.
 Backbone.Model::toJSON = ->
   _.extend {}, _.clone @attributes, id: @id ? @cid
-
-Backbone.LocalStorage::localStorage ->
-  chrome.storage.local
