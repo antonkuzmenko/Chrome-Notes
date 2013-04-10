@@ -8,29 +8,10 @@
     model: app.Model.Folder,
     name: 'folders',
     initialize: function() {
-      this.on('all', function(event) {
+      return this.on('all', function(event) {
         return console.log(event, 'Folder event');
       });
-      return this.fetch();
-    },
-    fetch: function(options) {
-      var collection, success;
-
-      options = options != null ? _.clone(options) : {};
-      collection = this;
-      success = options.success;
-      return chrome.storage.local.get('folders', function(folders) {
-        var method;
-
-        method = options.reset ? 'reset' : 'set';
-        collection[method](folders, options);
-        if (success != null) {
-          success(collection, folders, options);
-        }
-        return collection.trigger('sync', collection, folders, options);
-      });
-    },
-    save: function(options) {}
+    }
   });
 
   app.Collection.Folders = new Folders;

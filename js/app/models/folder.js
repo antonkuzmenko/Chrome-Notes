@@ -14,8 +14,8 @@
     initialize: function() {
       var _ref;
 
-      if ((_ref = this.cid) == null) {
-        this.cid = app.Iterator.folder.next();
+      if ((_ref = this.id) == null) {
+        this.id = app.Iterator.folder.next();
       }
       new app.View.Folder({
         model: this

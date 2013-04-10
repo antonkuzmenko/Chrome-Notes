@@ -6,7 +6,7 @@ Folder = Backbone.Model.extend
     notes: {}
 
   initialize: ->
-    @cid ?= app.Iterator.folder.next()
+    @id ?= app.Iterator.folder.next()
 
     new app.View.Folder model: @
     @listenEvents()

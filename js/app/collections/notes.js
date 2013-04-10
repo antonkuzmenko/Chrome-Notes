@@ -5,10 +5,7 @@
   app = window.app;
 
   Notes = Backbone.Collection.extend({
-    model: app.Model.Note,
-    initialize: function() {
-      return this.fetch();
-    }
+    model: app.Model.Note
   });
 
   app.Collection.Notes = new Notes;

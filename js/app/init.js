@@ -21,7 +21,7 @@
       i = 0;
       return {
         next: function() {
-          return i++;
+          return ++i;
         },
         get: function() {
           return i;
@@ -40,9 +40,26 @@
   Backbone.Model.prototype.toJSON = function() {
     var _ref;
 
-    return _.extend({}, _.clone(this.attributes, {
+    return _.extend({}, _.clone(this.attributes), {
       id: (_ref = this.id) != null ? _ref : this.cid
-    }));
+    });
+  };
+
+  Backbone.sync = function(method, model, options) {
+    var data, storageName, _ref;
+
+    storageName = model.storageName;
+    data = (_ref = options.attrs) != null ? _ref : model.toJSON();
+    switch (method) {
+      case 'create':
+      case 'update':
+      case 'patch':
+        return chrome.storage.local.set({
+          storageName: data
+        });
+      case 'delete':
+        return chrome.storage.local.remove(storageName);
+    }
   };
 
 }).call(this);
