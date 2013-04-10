@@ -25,9 +25,18 @@ Backbone.Model::toJSON = ->
   _.extend {}, _.clone(@attributes), id: @id ? @cid
 
 Backbone.sync = (method, model, options) ->
-  storageName = model.storageName
-  data = options.attrs ? model.toJSON()
+  data = {}
+  data[model.storageKey] = options.attrs ? model.toJSON()
 
   switch method
-    when 'create', 'update', 'patch' then chrome.storage.local.set storageName: data
+    when 'create', 'update', 'patch'
+      chrome.storage.local.set data, ->
+        errorMsg = chrome.runtime.lastError?.message
+        if errorMsg?
+          options.error errorMsg
+        else
+          options.success
+
     when 'delete' then chrome.storage.local.remove storageName
+    when 'read' then chrome.storage.local.get storageName
+

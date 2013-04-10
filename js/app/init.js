@@ -46,19 +46,28 @@
   };
 
   Backbone.sync = function(method, model, options) {
-    var data, storageName, _ref;
+    var data, _ref;
 
-    storageName = model.storageName;
-    data = (_ref = options.attrs) != null ? _ref : model.toJSON();
+    data = {};
+    data[model.storageKey] = (_ref = options.attrs) != null ? _ref : model.toJSON();
     switch (method) {
       case 'create':
       case 'update':
       case 'patch':
-        return chrome.storage.local.set({
-          storageName: data
+        return chrome.storage.local.set(data, function() {
+          var errorMsg, _ref1;
+
+          errorMsg = (_ref1 = chrome.runtime.lastError) != null ? _ref1.message : void 0;
+          if (errorMsg != null) {
+            return options.error(errorMsg);
+          } else {
+            return options.success;
+          }
         });
       case 'delete':
         return chrome.storage.local.remove(storageName);
+      case 'read':
+        return chrome.storage.local.get(storageName);
     }
   };
 
