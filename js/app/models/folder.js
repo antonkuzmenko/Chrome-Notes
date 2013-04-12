@@ -11,6 +11,7 @@
         notes: {}
       };
     },
+    type: 'folder',
     initialize: function() {
       var _ref;
 
@@ -25,6 +26,23 @@
     listenEvents: function() {
       this.on('remove', this.destroy, this);
       return this.on('remove', this.clear, this);
+    },
+    save: function() {
+      var note, noteIds;
+
+      noteIds = (function() {
+        var _i, _len, _ref, _results;
+
+        _ref = this.rel('notes');
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          note = _ref[_i];
+          _results.push(note.id);
+        }
+        return _results;
+      }).call(this);
+      this.set('notes', noteIds);
+      return Backbone.Model.prototype.save.apply(this, arguments);
     }
   });
 

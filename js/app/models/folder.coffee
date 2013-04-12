@@ -5,6 +5,8 @@ Folder = Backbone.Model.extend
     title: ''
     notes: {}
 
+  type: 'folder'
+
   initialize: ->
     @id ?= app.Iterator.folder.next()
 
@@ -14,6 +16,13 @@ Folder = Backbone.Model.extend
   listenEvents: ->
     @on 'remove', @destroy, @
     @on 'remove', @clear, @
+
+  save: () ->
+    # Save note ids.
+    noteIds = (note.id for note in @rel 'notes');
+    @set('notes', noteIds);
+
+    Backbone.Model::save.apply @, arguments
 
 Folder::hasMany = ->
   notes:

@@ -5,6 +5,8 @@ Note = Backbone.Model.extend
     title: ''
     body: ''
 
+  type: 'note'
+
   initialize: ->
     @id ?= app.Iterator.note.next()
     new app.View.Note model: @

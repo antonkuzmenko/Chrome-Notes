@@ -44,8 +44,7 @@ app.View.Folder = Backbone.View.extend
   destroy: -> @model.collection.remove @model
 
   render: ->
-    @$el.html @Templates.listItem @model.toJSON() +
-    @$el.html @Templates.formConfirm @model.toJSON()
+    @$el.html @Templates.listItem(@model.toJSON()) + @Templates.formConfirm @model.toJSON()
 
     @$input.remove() if @$input?
     @$input = @$ 'input'

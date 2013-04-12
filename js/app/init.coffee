@@ -16,6 +16,7 @@ iterator = do ->
     get: -> i
     set: (newI) -> i = newI
 
+# Separate iterators for folders and notes.
 window.app.Iterator.folder = iterator()
 window.app.Iterator.note = iterator()
 
@@ -24,19 +25,70 @@ window.app.Iterator.note = iterator()
 Backbone.Model::toJSON = ->
   _.extend {}, _.clone(@attributes), id: @id ? @cid
 
+# Use Chromes local storage as a main data storage.
 Backbone.sync = (method, model, options) ->
-  data = {}
-  data[model.storageKey] = options.attrs ? model.toJSON()
+  modelId = "#{model.type}-#{model.id}"
+  storage = chrome.storage.local
 
   switch method
     when 'create', 'update', 'patch'
-      chrome.storage.local.set data, ->
+      # Save model.
+      data = {}
+      data[modelId] = options.attrs ? model.toJSON options
+      storage.set data, ->
         errorMsg = chrome.runtime.lastError?.message
+        # Notify about occured error.
         if errorMsg?
           options.error errorMsg
         else
-          options.success
+          # Notify about success.
+          options.success(data)
+          # Save model id.
+          storage.get model.type, (identifiers) ->
+            identifiers[model.type] = [] if not identifiers[model.type]?
+            ids = identifiers[model.type]
 
-    when 'delete' then chrome.storage.local.remove storageName
-    when 'read' then chrome.storage.local.get storageName
+            if modelId not in ids
+              ids.push modelId
+              storage.set identifiers
+
+    when 'delete'
+      # Remove model.
+      storage.remove modelId, ->
+        errorMsg = chrome.runtime.lastError?.message
+
+        if errorMsg?
+          # Notify about occured error.
+          options.error errorMsg
+        else
+          # Notify about success.
+          options.success 'ok';
+          # Delete model id.
+          storage.get model.type, (identifiers) ->
+            ids = identifiers[model.type]
+            deletedIndex = ids.indexOf modelId
+
+            if deletedIndex isnt -1
+              ids.splice deletedIndex, 1
+              storage.set identifiers
+
+    when 'read'
+      # Retrieve model
+      storage.get modelId, (data) ->
+        errorMsg = chrome.runtime.lastError?.message
+
+        if errorMsg?
+          # Notify about occured error.
+          options.error errorMsg
+        else
+          # Notify about success.
+          options.success data
+
+
+#  Trigger native Backbones request event with params. (model, xhr, options)
+  model.trigger 'request', model, {}, options
+  null
+
+Backbone.Model::parse = (resp, options) ->
+  resp[@type + '-' + @id]
 

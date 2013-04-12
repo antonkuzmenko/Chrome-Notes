@@ -23,6 +23,10 @@
     initialize: function() {
       this.addFolder = _.bind(this.addFolder, this);
       this.addNote = _.bind(this.addNote, this);
+      this.focusFolderTitle = _.bind(this.focusFolderTitle, this);
+      this.focusNoteTitle = _.bind(this.focusNoteTitle, this);
+      this.clearFolder = _.bind(this.clearFolder, this);
+      this.clearNote = _.bind(this.clearNote, this);
       this.Forms.Folder.$el.on('hidden', this.clearFolder).on('shown', this.focusFolderTitle).on('click', '.add-folder', this.addFolder);
       this.Forms.Folder.$title.on('keyup', this.addFolder);
       this.Forms.Note.$el.on('hidden', this.clearNote).on('shown', this.focusNoteTitle).on('click', '.add-note', this.addNote);
@@ -52,11 +56,15 @@
       return this.Forms.Folder.$title.val('');
     },
     addNote: function() {
-      app.Collection.Notes.add({
+      var note;
+
+      note = new app.Model.Note({
         title: this.Forms.Note.$title.val(),
         body: this.Forms.Note.$body.val(),
         folder_id: this.Forms.Note.$foldersList.val()
       });
+      app.Collection.Notes.add(note);
+      note.save();
       return this.Forms.Note.$el.modal('hide');
     },
     focusNoteTitle: function() {

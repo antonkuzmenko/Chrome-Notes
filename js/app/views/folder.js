@@ -49,7 +49,7 @@
       return this.model.collection.remove(this.model);
     },
     render: function() {
-      this.$el.html(this.Templates.listItem(this.model.toJSON() + this.$el.html(this.Templates.formConfirm(this.model.toJSON()))));
+      this.$el.html(this.Templates.listItem(this.model.toJSON()) + this.Templates.formConfirm(this.model.toJSON()));
       if (this.$input != null) {
         this.$input.remove();
       }

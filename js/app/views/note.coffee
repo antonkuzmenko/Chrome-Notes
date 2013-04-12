@@ -9,7 +9,6 @@ app.View.Note = Backbone.View.extend
     noteItem: app.Template.Note.noteItem
 
   initialize: ->
-    console.log @Templates.noteItem
     @model.view = @
     @render().$el.appendTo @$notesWrapper
     @listenEvents()

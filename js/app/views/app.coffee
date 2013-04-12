@@ -19,10 +19,17 @@ app.View.App = Backbone.View.extend
     @addFolder = _.bind @addFolder, this
     @addNote = _.bind @addNote, this
 
+    @focusFolderTitle = _.bind @focusFolderTitle, this
+    @focusNoteTitle = _.bind @focusNoteTitle, this
+
+    @clearFolder = _.bind @clearFolder, this
+    @clearNote = _.bind @clearNote, this
+
     @Forms.Folder.$el
       .on('hidden', @clearFolder)
       .on('shown', @focusFolderTitle)
       .on('click', '.add-folder', @addFolder)
+
 
     @Forms.Folder.$title.on 'keyup', @addFolder
 
@@ -54,10 +61,14 @@ app.View.App = Backbone.View.extend
     @Forms.Folder.$title.val ''
 
   addNote: ->
-    app.Collection.Notes.add
+    note = new app.Model.Note
       title: @Forms.Note.$title.val()
       body: @Forms.Note.$body.val()
       folder_id: @Forms.Note.$foldersList.val()
+
+    app.Collection.Notes.add note
+    note.save()
+
 
     @Forms.Note.$el.modal 'hide'
 

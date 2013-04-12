@@ -11,7 +11,6 @@
       noteItem: app.Template.Note.noteItem
     },
     initialize: function() {
-      console.log(this.Templates.noteItem);
       this.model.view = this;
       this.render().$el.appendTo(this.$notesWrapper);
       return this.listenEvents();

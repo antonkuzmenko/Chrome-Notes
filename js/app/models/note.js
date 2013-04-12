@@ -11,6 +11,7 @@
         body: ''
       };
     },
+    type: 'note',
     initialize: function() {
       var _ref;
 
