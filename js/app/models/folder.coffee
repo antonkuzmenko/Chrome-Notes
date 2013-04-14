@@ -7,22 +7,29 @@ Folder = Backbone.Model.extend
 
   type: 'folder'
 
-  initialize: ->
+  initialize: () ->
     @id ?= app.Iterator.folder.next()
 
     new app.View.Folder model: @
     @listenEvents()
 
   listenEvents: ->
-    @on 'remove', @destroy, @
-    @on 'remove', @clear, @
+    @on 'remove', ->
+      @destroyNotes()
+      @destroy()
+      @clear()
+    , @
+    # TODO: destroy notes.
 
   save: () ->
     # Save note ids.
-    noteIds = (note.id for note in @rel 'notes');
-    @set('notes', noteIds);
+    noteIds = (note.id for note in @rel 'notes')
+    @set('notes', noteIds)
 
     Backbone.Model::save.apply @, arguments
+
+  destroyNotes: ->
+    note.collection.remove(note) for note in @rel 'notes'
 
 Folder::hasMany = ->
   notes:

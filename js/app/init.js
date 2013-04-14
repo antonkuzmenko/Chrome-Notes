@@ -47,9 +47,10 @@
   };
 
   Backbone.sync = function(method, model, options) {
-    var data, modelId, storage, _ref;
+    var data, id, modelId, storage, _ref;
 
     modelId = "" + model.type + "-" + model.id;
+    id = model.id;
     storage = chrome.storage.local;
     switch (method) {
       case 'create':
@@ -64,16 +65,16 @@
           if (errorMsg != null) {
             return options.error(errorMsg);
           } else {
-            options.success(data);
+            options.success(data[modelId]);
             return storage.get(model.type, function(identifiers) {
-              var ids;
+              var ids, _ref2;
 
               if (identifiers[model.type] == null) {
                 identifiers[model.type] = [];
               }
               ids = identifiers[model.type];
-              if (__indexOf.call(ids, modelId) < 0) {
-                ids.push(modelId);
+              if (_ref2 = model.id, __indexOf.call(ids, _ref2) < 0) {
+                ids.push(model.id);
                 return storage.set(identifiers);
               }
             });
@@ -93,7 +94,7 @@
               var deletedIndex, ids;
 
               ids = identifiers[model.type];
-              deletedIndex = ids.indexOf(modelId);
+              deletedIndex = ids.indexOf(id);
               if (deletedIndex !== -1) {
                 ids.splice(deletedIndex, 1);
                 return storage.set(identifiers);
@@ -103,14 +104,31 @@
         });
         break;
       case 'read':
-        storage.get(modelId, function(data) {
-          var errorMsg, _ref1;
+        storage.get(model.type, function(modelIds) {
+          var errorMsg, models, modelsLen, _fn, _i, _len, _ref1, _ref2;
 
           errorMsg = (_ref1 = chrome.runtime.lastError) != null ? _ref1.message : void 0;
           if (errorMsg != null) {
             return options.error(errorMsg);
           } else {
-            return options.success(data);
+            if (_.isEmpty(modelIds)) {
+              return;
+            }
+            models = [];
+            modelsLen = modelIds[model.type].length;
+            _ref2 = modelIds[model.type];
+            _fn = function(id) {
+              return storage.get(model.type + '-' + id, function(data) {
+                models.push(data[model.type + '-' + id]);
+                if (modelsLen === models.length) {
+                  return options.success(models);
+                }
+              });
+            };
+            for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+              id = _ref2[_i];
+              _fn(id);
+            }
           }
         });
     }
@@ -118,8 +136,8 @@
     return null;
   };
 
-  Backbone.Model.prototype.parse = function(resp, options) {
-    return resp[this.type + '-' + this.id];
-  };
-
 }).call(this);
+
+/*
+//@ sourceMappingURL=init.map
+*/

@@ -24,8 +24,11 @@
       return this.listenEvents();
     },
     listenEvents: function() {
-      this.on('remove', this.destroy, this);
-      return this.on('remove', this.clear, this);
+      return this.on('remove', function() {
+        this.destroyNotes();
+        this.destroy();
+        return this.clear();
+      }, this);
     },
     save: function() {
       var note, noteIds;
@@ -43,6 +46,17 @@
       }).call(this);
       this.set('notes', noteIds);
       return Backbone.Model.prototype.save.apply(this, arguments);
+    },
+    destroyNotes: function() {
+      var note, _i, _len, _ref, _results;
+
+      _ref = this.rel('notes');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        note = _ref[_i];
+        _results.push(note.collection.remove(note));
+      }
+      return _results;
     }
   });
 

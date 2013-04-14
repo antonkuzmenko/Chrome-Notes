@@ -6,11 +6,12 @@
 
   Folders = Backbone.Collection.extend({
     model: app.Model.Folder,
-    name: 'folders',
+    type: 'folder',
     initialize: function() {
-      return this.on('all', function(event) {
+      this.on('all', function(event) {
         return console.log(event, 'Folder event');
       });
+      return this.fetch();
     }
   });
 

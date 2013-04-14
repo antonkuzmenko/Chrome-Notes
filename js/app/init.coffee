@@ -28,6 +28,7 @@ Backbone.Model::toJSON = ->
 # Use Chromes local storage as a main data storage.
 Backbone.sync = (method, model, options) ->
   modelId = "#{model.type}-#{model.id}"
+  id = model.id
   storage = chrome.storage.local
 
   switch method
@@ -42,14 +43,14 @@ Backbone.sync = (method, model, options) ->
           options.error errorMsg
         else
           # Notify about success.
-          options.success(data)
+          options.success data[modelId]
           # Save model id.
           storage.get model.type, (identifiers) ->
             identifiers[model.type] = [] if not identifiers[model.type]?
             ids = identifiers[model.type]
 
-            if modelId not in ids
-              ids.push modelId
+            if model.id not in ids
+              ids.push model.id
               storage.set identifiers
 
     when 'delete'
@@ -66,15 +67,15 @@ Backbone.sync = (method, model, options) ->
           # Delete model id.
           storage.get model.type, (identifiers) ->
             ids = identifiers[model.type]
-            deletedIndex = ids.indexOf modelId
+            deletedIndex = ids.indexOf id
 
             if deletedIndex isnt -1
               ids.splice deletedIndex, 1
               storage.set identifiers
 
     when 'read'
-      # Retrieve model
-      storage.get modelId, (data) ->
+      # Retrieve models ids
+      storage.get model.type, (modelIds) ->
         errorMsg = chrome.runtime.lastError?.message
 
         if errorMsg?
@@ -82,13 +83,21 @@ Backbone.sync = (method, model, options) ->
           options.error errorMsg
         else
           # Notify about success.
-          options.success data
+          if _.isEmpty modelIds then return
+
+          models = []
+          modelsLen = modelIds[model.type].length
+          for id in modelIds[model.type]
+            do (id) ->
+              storage.get model.type + '-' + id, (data) ->
+                models.push(data[model.type + '-' + id])
+
+                if modelsLen is models.length
+                  options.success models
+
+          return
 
 
 #  Trigger native Backbones request event with params. (model, xhr, options)
   model.trigger 'request', model, {}, options
   null
-
-Backbone.Model::parse = (resp, options) ->
-  resp[@type + '-' + @id]
-

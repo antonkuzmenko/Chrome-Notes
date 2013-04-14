@@ -8,12 +8,10 @@ app.View.App = Backbone.View.extend
 
     Note:
       $el: $ '#form-add-note'
-      $title: $ '#new-note-title'
-      $body: $ '#new-note-body'
-      $foldersList: $ '#new-note-folder'
+      form: document.note_form
 
   Templates:
-    foldersSelectList: app.Template.Note.foldersSelectList
+    noteForm: app.Template.Note.noteForm
 
   initialize: ->
     @addFolder = _.bind @addFolder, this
@@ -21,9 +19,9 @@ app.View.App = Backbone.View.extend
 
     @focusFolderTitle = _.bind @focusFolderTitle, this
     @focusNoteTitle = _.bind @focusNoteTitle, this
+    @renderNoteForm = _.bind @renderNoteForm, this
 
     @clearFolder = _.bind @clearFolder, this
-    @clearNote = _.bind @clearNote, this
 
     @Forms.Folder.$el
       .on('hidden', @clearFolder)
@@ -34,16 +32,11 @@ app.View.App = Backbone.View.extend
     @Forms.Folder.$title.on 'keyup', @addFolder
 
     @Forms.Note.$el
-      .on('hidden', @clearNote)
+      .on('show', @renderNoteForm)
       .on('shown', @focusNoteTitle)
       .on('click', '.add-note', @addNote)
 
-    @renderFoldersSelectList
-    @listenEvents()
-
-  listenEvents: ->
-    @listenTo app.Collection.Folders, 'remove add change:title', @renderFoldersSelectList
-    return
+    @Forms.Note.form.onsubmit = (event) -> event.preventDefault()
 
   addFolder: (event) ->
     if event.type is 'keyup' and event.which isnt 13 then return
@@ -55,31 +48,29 @@ app.View.App = Backbone.View.extend
     @Forms.Folder.$el.modal 'hide'
 
   focusFolderTitle: ->
-    @Forms.Folder.$title.val ''
+    @Forms.Folder.$title.focus()
 
   clearFolder: ->
     @Forms.Folder.$title.val ''
 
   addNote: ->
+    form = @Forms.Note.form
+
     note = new app.Model.Note
-      title: @Forms.Note.$title.val()
-      body: @Forms.Note.$body.val()
-      folder_id: @Forms.Note.$foldersList.val()
+      title: form.title.value
+      body: form.body.value
+      folder_id: form.folder.value
 
     app.Collection.Notes.add note
     note.save()
 
-
     @Forms.Note.$el.modal 'hide'
 
   focusNoteTitle: ->
-    @Forms.Note.$title.focus()
+    @Forms.Note.form.title.focus()
 
-  clearNote: ->
-    @Forms.Note.$title.val ''
-    @Forms.Note.$body.val ''
-
-  renderFoldersSelectList: ->
-    folders = @Templates.foldersSelectList folders: app.Collection.Folders.toJSON()
-    @Forms.Note.$foldersList.html folders
-    @
+  renderNoteForm: ->
+    @Forms.Note.form.innerHTML = @Templates.noteForm
+      title: ''
+      body: ''
+      folders: app.Collection.Folders.toJSON()

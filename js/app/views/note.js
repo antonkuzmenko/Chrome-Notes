@@ -6,6 +6,9 @@
 
   app.View.Note = Backbone.View.extend({
     className: 'row-fluid',
+    events: {
+      'click .delete': 'destroy'
+    },
     $notesWrapper: $('#notes'),
     Templates: {
       noteItem: app.Template.Note.noteItem
@@ -19,6 +22,9 @@
       this.listenTo(this.model, 'change:title change:body', this.render);
       this.listenTo(this.model, 'remove', this.remove);
       return this;
+    },
+    destroy: function(event) {
+      return event.preventDefault();
     },
     render: function() {
       this.$el.html(this.Templates.noteItem(this.model.toJSON()));
