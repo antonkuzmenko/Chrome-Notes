@@ -39,7 +39,7 @@ return __p;
   Template.Note.noteItem = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='\n    <div class="actions">\n        <a href="#form-add-note" data-toggle="modal" class="btn btn-info edit" data-action="edit">\n            <i class="icon-pencil icon-white"></i>\n        </a>\n        <a href="#form-note-confirm" data-toggle="modal" class="btn btn-danger" data-action="delete">\n            <i class="icon-trash icon-white"></i>\n        </a>\n    </div>\n    <h4><a href="#/note/'+
+__p+='\n    <div class="actions">\n        <a href="#form-add-note" data-toggle="modal" class="btn btn-info edit" data-action="edit">\n            <i class="icon-pencil icon-white"></i>\n        </a>\n        <a href="#form-note-confirm" data-toggle="modal" class="btn btn-danger delete" data-action="delete">\n            <i class="icon-trash icon-white"></i>\n        </a>\n    </div>\n    <h4><a href="#/note/'+
 ((__t=( id ))==null?'':__t)+
 '">'+
 ((__t=( title ))==null?'':_.escape(__t))+
@@ -57,17 +57,35 @@ __p+='\n    <div class="modal-header">\n        <button type="button" class="clo
  _.each(folders, function(folder, index) {
 __p+='\n                <option value="'+
 ((__t=( folder.id ))==null?'':__t)+
-'">'+
+'" '+
+((__t=( +folder.id === +folder_id ? "selected" : "" ))==null?'':__t)+
+'>'+
 ((__t=( folder.title ))==null?'':__t)+
-'</option>\n                '+
-((__t=( index ))==null?'':__t)+
-'\n            ';
+'</option>\n            ';
  });
 __p+='\n            </select>\n        </p>\n        <p><input type="text" name="title" id="new-note-title" class="input-xlarge" placeholder="Type the title..." value="'+
 ((__t=( title ))==null?'':__t)+
 '" /></p>\n        <p><textarea name="body" id="new-note-body" class="input-xlarge" cols="30" rows="10" placeholder="Type the body...">'+
 ((__t=( body ))==null?'':__t)+
-'</textarea></p>\n    </div>\n    <div class="modal-footer">\n        <button class="btn btn-primary add-note">Save</button>\n        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>\n    </div>\n';
+'</textarea></p>\n    </div>\n    <div class="modal-footer">\n        <button class="btn btn-primary '+
+((__t=( id ? "save" : "add" ))==null?'':__t)+
+'-note" '+
+((__t=( id ? "data-id='" + id + "'" : '' ))==null?'':__t)+
+'>Save</button>\n        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>\n    </div>\n';
+}
+return __p;
+};
+
+  Template.Note.confirmForm = function(obj){
+var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
+with(obj||{}){
+__p+='\n    <div class="modal-header">\n        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>\n        <h3 id="myModalLabelNote'+
+((__t=( id ))==null?'':__t)+
+'">'+
+((__t=( title ))==null?'':__t)+
+'</h3>\n    </div>\n    <div class="modal-body">\n        <p>Are you sure you want to delete this note?</p>\n    </div>\n    <div class="modal-footer">\n        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>\n        <button class="btn btn-danger delete" data-id="'+
+((__t=( id ))==null?'':__t)+
+'" data-dismiss="modal">Delete</button>\n    </div>\n';
 }
 return __p;
 };

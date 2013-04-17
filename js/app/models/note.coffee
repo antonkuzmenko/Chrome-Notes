@@ -14,8 +14,10 @@ Note = Backbone.Model.extend
 
   listenEvents: ->
     @on 'all', (event) -> console.log event, 'Note event'
-    @on 'remove', @destroy, @
-    @on 'remove', @clear, @
+    @on 'remove', ->
+      @destroy()
+      @clear()
+    , @
 
 Note::belongsTo = -> folder: app.Collection.Folders
 

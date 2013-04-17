@@ -7,15 +7,25 @@
   app.View.Note = Backbone.View.extend({
     className: 'row-fluid',
     events: {
-      'click .delete': 'destroy'
+      'click .edit': 'renderForm',
+      'click .delete': 'renderConfirmForm'
     },
     $notesWrapper: $('#notes'),
+    $noteForm: $('#form-add-note'),
+    $confirmModalForm: $('#form-note-confirm'),
+    form: document.note_form,
     Templates: {
-      noteItem: app.Template.Note.noteItem
+      noteItem: app.Template.Note.noteItem,
+      noteForm: app.Template.Note.noteForm,
+      noteConfirmForm: app.Template.Note.confirmForm
     },
     initialize: function() {
+      this.save = _.bind(this.save, this);
+      this.destroy = _.bind(this.destroy, this);
       this.model.view = this;
       this.render().$el.appendTo(this.$notesWrapper);
+      this.$noteForm.on('click', '.save-note', this.save);
+      this.$confirmModalForm.on('click', '.delete', this.destroy);
       return this.listenEvents();
     },
     listenEvents: function() {
@@ -24,7 +34,30 @@
       return this;
     },
     destroy: function(event) {
-      return event.preventDefault();
+      if (+event.target.dataset.id !== +this.model.id) {
+        return;
+      }
+      this.model.collection.remove(this.model);
+      return this.$confirmModalForm.modal('hide');
+    },
+    renderForm: function() {
+      return this.form.innerHTML = this.Templates.noteForm(_.extend({}, this.model.toJSON(), {
+        folders: app.Collection.Folders.toJSON()
+      }));
+    },
+    renderConfirmForm: function() {
+      return this.$confirmModalForm.html(this.Templates.noteConfirmForm(this.model.toJSON()));
+    },
+    save: function(event) {
+      if (+event.target.dataset.id !== +this.model.id) {
+        return;
+      }
+      this.model.save({
+        title: this.form.title.value,
+        body: this.form.body.value,
+        folder_id: this.form.folder.value
+      });
+      return this.$noteForm.modal('hide');
     },
     render: function() {
       this.$el.html(this.Templates.noteItem(this.model.toJSON()));

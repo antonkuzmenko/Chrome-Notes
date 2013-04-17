@@ -9,6 +9,7 @@ app.View.App = Backbone.View.extend
     Note:
       $el: $ '#form-add-note'
       form: document.note_form
+      $newButton: $ '#new-note'
 
   Templates:
     noteForm: app.Template.Note.noteForm
@@ -32,9 +33,10 @@ app.View.App = Backbone.View.extend
     @Forms.Folder.$title.on 'keyup', @addFolder
 
     @Forms.Note.$el
-      .on('show', @renderNoteForm)
       .on('shown', @focusNoteTitle)
       .on('click', '.add-note', @addNote)
+
+    @Forms.Note.$newButton.on 'click', @renderNoteForm
 
     @Forms.Note.form.onsubmit = (event) -> event.preventDefault()
 
@@ -74,3 +76,5 @@ app.View.App = Backbone.View.extend
       title: ''
       body: ''
       folders: app.Collection.Folders.toJSON()
+      folder_id: -1
+      id: false

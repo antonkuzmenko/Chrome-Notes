@@ -12,7 +12,8 @@
       },
       Note: {
         $el: $('#form-add-note'),
-        form: document.note_form
+        form: document.note_form,
+        $newButton: $('#new-note')
       }
     },
     Templates: {
@@ -27,7 +28,8 @@
       this.clearFolder = _.bind(this.clearFolder, this);
       this.Forms.Folder.$el.on('hidden', this.clearFolder).on('shown', this.focusFolderTitle).on('click', '.add-folder', this.addFolder);
       this.Forms.Folder.$title.on('keyup', this.addFolder);
-      this.Forms.Note.$el.on('show', this.renderNoteForm).on('shown', this.focusNoteTitle).on('click', '.add-note', this.addNote);
+      this.Forms.Note.$el.on('shown', this.focusNoteTitle).on('click', '.add-note', this.addNote);
+      this.Forms.Note.$newButton.on('click', this.renderNoteForm);
       return this.Forms.Note.form.onsubmit = function(event) {
         return event.preventDefault();
       };
@@ -71,7 +73,9 @@
       return this.Forms.Note.form.innerHTML = this.Templates.noteForm({
         title: '',
         body: '',
-        folders: app.Collection.Folders.toJSON()
+        folders: app.Collection.Folders.toJSON(),
+        folder_id: -1,
+        id: false
       });
     }
   });

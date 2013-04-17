@@ -27,8 +27,10 @@
       this.on('all', function(event) {
         return console.log(event, 'Note event');
       });
-      this.on('remove', this.destroy, this);
-      return this.on('remove', this.clear, this);
+      return this.on('remove', function() {
+        this.destroy();
+        return this.clear();
+      }, this);
     }
   });
 

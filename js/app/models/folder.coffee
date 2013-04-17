@@ -9,7 +9,6 @@ Folder = Backbone.Model.extend
 
   initialize: () ->
     @id ?= app.Iterator.folder.next()
-
     new app.View.Folder model: @
     @listenEvents()
 
@@ -19,7 +18,6 @@ Folder = Backbone.Model.extend
       @destroy()
       @clear()
     , @
-    # TODO: destroy notes.
 
   save: () ->
     # Save note ids.
