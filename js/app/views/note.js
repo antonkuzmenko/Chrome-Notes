@@ -17,20 +17,25 @@
     Templates: {
       noteItem: app.Template.Note.noteItem,
       noteForm: app.Template.Note.noteForm,
-      noteConfirmForm: app.Template.Note.confirmForm
+      noteConfirmForm: app.Template.Note.confirmForm,
+      noteFull: app.Template.Note.full
     },
     initialize: function() {
       this.save = _.bind(this.save, this);
       this.destroy = _.bind(this.destroy, this);
       this.model.view = this;
-      this.render().$el.appendTo(this.$notesWrapper);
+      this.viewType = 'list';
+      this.show();
       this.$noteForm.on('click', '.save-note', this.save);
       this.$confirmModalForm.on('click', '.delete', this.destroy);
       return this.listenEvents();
     },
     listenEvents: function() {
-      this.listenTo(this.model, 'change:title change:body', this.render);
+      this.listenTo(this.model, 'change:title change:body', this.renderListItem);
+      this.listenTo(this.model, 'change:title change:body', this.renderFull);
       this.listenTo(this.model, 'remove', this.remove);
+      this.listenTo(app.AppEvent, 'hide:notes', this.hide);
+      this.listenTo(app.AppEvent, 'show:notes', this.show);
       return this;
     },
     destroy: function(event) {
@@ -48,6 +53,17 @@
       this.$noteForm.unbind('click', this.save);
       this.$confirmModalForm.unbind('click', this.destroy);
       return Backbone.View.prototype.remove.apply(this, arguments);
+    },
+    hide: function() {
+      return this.$el.detach();
+    },
+    show: function() {
+      this.viewType = 'list';
+      return this.renderListItem().$el.appendTo(this.$notesWrapper);
+    },
+    showFull: function() {
+      this.viewType = 'full';
+      return this.renderFull().$el.appendTo(this.$notesWrapper);
     },
     renderForm: function() {
       return this.form.innerHTML = this.Templates.noteForm(_.extend({}, this.model.toJSON(), {
@@ -68,8 +84,16 @@
       });
       return this.$noteForm.modal('hide');
     },
-    render: function() {
-      this.$el.html(this.Templates.noteItem(this.model.toJSON()));
+    renderListItem: function() {
+      if (this.viewType === 'list') {
+        this.$el.html(this.Templates.noteItem(this.model.toJSON()));
+      }
+      return this;
+    },
+    renderFull: function() {
+      if (this.viewType === 'full') {
+        this.$el.html(this.Templates.noteFull(this.model.toJSON()));
+      }
       return this;
     }
   });

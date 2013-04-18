@@ -8,6 +8,13 @@
     model: app.Model.Folder,
     type: 'folder',
     initialize: function() {
+      this.on('sync', function(model, resp) {
+        if ((resp != null) && (resp.length != null)) {
+          return app.Iterator.folder.set(_.max(resp, function(folder) {
+            return folder.id;
+          }).id);
+        }
+      });
       return this.fetch();
     }
   });

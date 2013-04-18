@@ -8,6 +8,13 @@
     model: app.Model.Note,
     type: 'note',
     initialize: function() {
+      this.on('sync', function(model, resp) {
+        if ((resp != null) && (resp.length != null)) {
+          return app.Iterator.note.set(_.max(resp, function(note) {
+            return note.id;
+          }).id);
+        }
+      });
       return this.fetch();
     }
   });

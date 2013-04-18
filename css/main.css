@@ -66,7 +66,7 @@
 
 #notes > .row-fluid > .actions {
     float: right;
-    margin: 6px 0;
+    margin: 6px 10px 6px 0;
 }
 
 #notes > .row-fluid:hover {
@@ -89,6 +89,7 @@
 
 #folders > .row-fluid input[type=text] {
     display: none;
+    max-width: 150px;
 }
 
 #folders > .row-fluid.edit input[type=text] {
@@ -119,7 +120,7 @@
 
 #folders > .row-fluid .btn-group {
     float: right;
-    margin: 6px 0;
+    margin: 6px 10px 6px 0;
 }
 
 .form-confirm {
@@ -144,4 +145,13 @@
 
 .modal.fade.in {
     top: 100px;
+}
+
+.full-note-wrapper {
+   padding: 10px;
+}
+
+.full-note-wrapper > .actions {
+    float: right;
+    margin: 6px 0;
 }

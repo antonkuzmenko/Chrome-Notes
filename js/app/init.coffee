@@ -2,11 +2,11 @@ window.app =
   Model: {}
   Collection: {}
   View: {}
-  Mixin: {}
   Iterator: {}
   Template:
     Folder: {}
     Note: {}
+  AppEvent: _.extend {}, Backbone.Events
 
 # Iterator factory.
 iterator = do ->

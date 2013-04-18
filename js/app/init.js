@@ -7,12 +7,12 @@
     Model: {},
     Collection: {},
     View: {},
-    Mixin: {},
     Iterator: {},
     Template: {
       Folder: {},
       Note: {}
-    }
+    },
+    AppEvent: _.extend({}, Backbone.Events)
   };
 
   iterator = (function() {

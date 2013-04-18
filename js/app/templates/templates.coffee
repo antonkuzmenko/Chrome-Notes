@@ -1,6 +1,6 @@
 Template = window.app.Template
 
-# Equals to listItem = _.templates $('#folder-item').html()
+# Equals to listItem = _.template $('#folder-item').html()
 Template.Folder.listItem = `function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
@@ -17,7 +17,7 @@ __p+='\n    <div class="btn-group">\n        <a class="btn dropdown-toggle btn-p
 return __p;
 }`
 
-# Equals to formConfirm = _.templates $('#form-folder-confirm').html()
+# Equals to formConfirm = _.template $('#form-folder-confirm').html()
 Template.Folder.formConfirm = `function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
@@ -34,7 +34,7 @@ __p+='\n    <div id="form-folder-confirm-'+
 return __p;
 }`
 
-# Equals to noteItem = _.templates $('#note-item').html()
+# Equals to noteItem = _.template $('#note-item').html()
 Template.Note.noteItem = `function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
@@ -47,12 +47,12 @@ __p+='\n    <div class="actions">\n        <a href="#form-add-note" data-toggle=
 return __p;
 }`
 
-# Equals to noteItem = _.templates $('#form-note-template').html()
+# Equals to noteItem = _.template $('#form-note-template').html()
 Template.Note.noteForm = `function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
 __p+='\n    <div class="modal-header">\n        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>\n        <h3 id="addNoteLabel">'+
-((__t=( title ? "Edit note" : "New note" ))==null?'':__t)+
+((__t=( title ? "Edit note" : "New note" ))==null?'':_.escape(__t))+
 '</h3>\n    </div>\n    <div class="modal-body">\n        <p>\n            <label for="new-note-folder">Choose folder</label>\n            <select name="folder" id="new-note-folder" class="span3">\n            ';
  _.each(folders, function(folder, index) {
 __p+='\n                <option value="'+
@@ -60,13 +60,13 @@ __p+='\n                <option value="'+
 '" '+
 ((__t=( +folder.id === +folder_id ? "selected" : "" ))==null?'':__t)+
 '>'+
-((__t=( folder.title ))==null?'':__t)+
+((__t=( folder.title ))==null?'':_.escape(__t))+
 '</option>\n            ';
  });
 __p+='\n            </select>\n        </p>\n        <p><input type="text" name="title" id="new-note-title" class="input-xlarge" placeholder="Type the title..." value="'+
-((__t=( title ))==null?'':__t)+
+((__t=( title ))==null?'':_.escape(__t))+
 '" /></p>\n        <p><textarea name="body" id="new-note-body" class="input-xlarge" cols="30" rows="10" placeholder="Type the body...">'+
-((__t=( body ))==null?'':__t)+
+((__t=( body ))==null?'':_.escape(__t))+
 '</textarea></p>\n    </div>\n    <div class="modal-footer">\n        <button class="btn btn-primary '+
 ((__t=( id ? "save" : "add" ))==null?'':__t)+
 '-note" '+
@@ -76,17 +76,30 @@ __p+='\n            </select>\n        </p>\n        <p><input type="text" name=
 return __p;
 }`
 
-# Equals to noteItem = _.templates $('#form-note-confirm-template').html()
+# Equals to noteItem = _.template $('#form-note-confirm-template').html()
 Template.Note.confirmForm = `function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
 __p+='\n    <div class="modal-header">\n        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>\n        <h3 id="myModalLabelNote'+
 ((__t=( id ))==null?'':__t)+
 '">'+
-((__t=( title ))==null?'':__t)+
+((__t=( title ))==null?'':_.escape(__t))+
 '</h3>\n    </div>\n    <div class="modal-body">\n        <p>Are you sure you want to delete this note?</p>\n    </div>\n    <div class="modal-footer">\n        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>\n        <button class="btn btn-danger delete" data-id="'+
 ((__t=( id ))==null?'':__t)+
 '" data-dismiss="modal">Delete</button>\n    </div>\n';
+}
+return __p;
+}`
+
+# Equals to noteItem = _.template $('#note-full-template').html()
+Template.Note.full = `function(obj){
+var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
+with(obj||{}){
+__p+='\n    <div class="full-note-wrapper">\n        <div class="actions">\n            <a href="#form-add-note" data-toggle="modal" class="btn btn-info edit" data-action="edit">\n                <i class="icon-pencil icon-white"></i>\n            </a>\n            <a href="#form-note-confirm" data-toggle="modal" class="btn btn-danger delete" data-action="delete">\n                <i class="icon-trash icon-white"></i>\n            </a>\n        </div>\n        <h3 class="note-title">'+
+((__t=( title ))==null?'':_.escape(__t))+
+'</h3>\n        <div id="note-body">'+
+((__t=( body ))==null?'':_.escape(__t))+
+'</div>\n    </div>\n';
 }
 return __p;
 }`
