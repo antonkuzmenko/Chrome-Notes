@@ -27,7 +27,8 @@
       return this.on('remove', function() {
         this.destroyNotes();
         this.destroy();
-        return this.clear();
+        this.clear();
+        return delete this.view;
       }, this);
     },
     save: function() {

@@ -57,11 +57,11 @@
       return this;
     },
     remove: function() {
-      Backbone.View.prototype.remove.apply(this, arguments);
       this.$input.remove();
       delete this.options.model;
       delete this.model.view;
       delete this.model;
+      Backbone.View.prototype.remove.apply(this, arguments);
       return this;
     }
   });

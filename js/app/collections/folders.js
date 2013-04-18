@@ -8,9 +8,6 @@
     model: app.Model.Folder,
     type: 'folder',
     initialize: function() {
-      this.on('all', function(event) {
-        return console.log(event, 'Folder event');
-      });
       return this.fetch();
     }
   });

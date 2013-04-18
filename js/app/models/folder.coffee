@@ -17,6 +17,8 @@ Folder = Backbone.Model.extend
       @destroyNotes()
       @destroy()
       @clear()
+      delete @view
+
     , @
 
   save: () ->

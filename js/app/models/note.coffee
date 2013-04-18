@@ -13,7 +13,6 @@ Note = Backbone.Model.extend
     @listenEvents()
 
   listenEvents: ->
-    @on 'all', (event) -> console.log event, 'Note event'
     @on 'remove', ->
       @destroy()
       @clear()

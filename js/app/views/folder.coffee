@@ -51,11 +51,11 @@ app.View.Folder = Backbone.View.extend
     @
 
   remove: () ->
-    Backbone.View::remove.apply @, arguments
-
     @$input.remove()
 
     delete @options.model
     delete @model.view
     delete @model
+
+    Backbone.View::remove.apply @, arguments
     @

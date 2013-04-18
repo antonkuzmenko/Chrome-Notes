@@ -126,8 +126,22 @@
     width: 400px;
 }
 
-#form-add-folder,
-#form-add-note {
+.modal {
     width: 315px;
     margin-left: -162px;
+}
+
+@media (max-width: 767px) {
+    .modal {
+        position: fixed;
+        top: 20px;
+        right: 100px;
+        left: 100px;
+        width: auto;
+        margin: 0;
+    }
+}
+
+.modal.fade.in {
+    top: 100px;
 }

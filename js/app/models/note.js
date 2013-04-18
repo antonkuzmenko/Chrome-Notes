@@ -24,9 +24,6 @@
       return this.listenEvents();
     },
     listenEvents: function() {
-      this.on('all', function(event) {
-        return console.log(event, 'Note event');
-      });
       return this.on('remove', function() {
         this.destroy();
         return this.clear();

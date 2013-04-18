@@ -5,7 +5,6 @@ Folders = Backbone.Collection.extend
   type: 'folder'
 
   initialize: ->
-    @on 'all', (event) -> console.log event, 'Folder event'
     @fetch()
 
 app.Collection.Folders = new Folders

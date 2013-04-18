@@ -38,7 +38,16 @@
         return;
       }
       this.model.collection.remove(this.model);
-      return this.$confirmModalForm.modal('hide');
+      this.$confirmModalForm.modal('hide');
+      return this;
+    },
+    remove: function() {
+      delete this.options.model;
+      delete this.model.view;
+      delete this.model;
+      this.$noteForm.unbind('click', this.save);
+      this.$confirmModalForm.unbind('click', this.destroy);
+      return Backbone.View.prototype.remove.apply(this, arguments);
     },
     renderForm: function() {
       return this.form.innerHTML = this.Templates.noteForm(_.extend({}, this.model.toJSON(), {

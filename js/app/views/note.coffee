@@ -25,7 +25,7 @@ app.View.Note = Backbone.View.extend
     @render().$el.appendTo @$notesWrapper
 
     @$noteForm.on 'click', '.save-note', @save
-    @$confirmModalForm.on('click', '.delete', @destroy);
+    @$confirmModalForm.on 'click', '.delete', @destroy
 
     @listenEvents()
 
@@ -38,7 +38,19 @@ app.View.Note = Backbone.View.extend
     if +event.target.dataset.id isnt +@model.id then return
 
     @model.collection.remove @model
+
     @$confirmModalForm.modal 'hide'
+    @
+
+  remove: ->
+    delete @options.model
+    delete @model.view
+    delete @model
+
+    @$noteForm.unbind 'click', @save
+    @$confirmModalForm.unbind 'click', @destroy
+
+    Backbone.View::remove.apply @, arguments
 
   renderForm: ->
     @form.innerHTML = @Templates.noteForm _.extend {}, @model.toJSON(), folders: app.Collection.Folders.toJSON()
