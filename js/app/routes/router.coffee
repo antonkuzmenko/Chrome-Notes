@@ -5,7 +5,8 @@ Router = Backbone.Router.extend
     routes: {
       'folder/:id': 'folder'
       'note/:id': 'note'
-      '': 'all'
+      '': 'all',
+      'search': 'search'
     }
 
     # Show notes of selected folder
@@ -22,6 +23,9 @@ Router = Backbone.Router.extend
     # Show all notes
     all: ->
       app.AppEvent.trigger 'show:notes'
+
+    search: ->
+
 
 app.Router = new Router
 Backbone.history.start()

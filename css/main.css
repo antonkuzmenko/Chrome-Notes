@@ -73,7 +73,7 @@
     background-color: #eeeeee;
 }
 
-#notes > .row-fluid.new-note-wrapper:hover {
+#notes > .row-fluid.not-hover:hover {
     background: none;
 }
 
@@ -81,10 +81,6 @@
 
 #new-folder {
     margin-bottom: 10px;
-}
-
-.folders .row-fluid.new-folder-wrapper:hover {
-    background: none;
 }
 
 #folders > .row-fluid input[type=text] {
@@ -155,3 +151,4 @@
     float: right;
     margin: 6px 0;
 }
+

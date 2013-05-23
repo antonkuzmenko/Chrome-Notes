@@ -16,6 +16,7 @@
         $newButton: $('#new-note')
       }
     },
+    $searchField: $('#search'),
     Templates: {
       noteForm: app.Template.Note.noteForm
     },
@@ -25,14 +26,16 @@
       this.focusFolderTitle = _.bind(this.focusFolderTitle, this);
       this.focusNoteTitle = _.bind(this.focusNoteTitle, this);
       this.renderNoteForm = _.bind(this.renderNoteForm, this);
+      this.doSearch = _.bind(this.doSearch, this);
       this.clearFolder = _.bind(this.clearFolder, this);
       this.Forms.Folder.$el.on('hidden', this.clearFolder).on('shown', this.focusFolderTitle).on('click', '.add-folder', this.addFolder);
       this.Forms.Folder.$title.on('keyup', this.addFolder);
       this.Forms.Note.$el.on('shown', this.focusNoteTitle).on('click', '.add-note', this.addNote);
       this.Forms.Note.$newButton.on('click', this.renderNoteForm);
-      return this.Forms.Note.form.onsubmit = function(event) {
+      this.Forms.Note.form.onsubmit = function(event) {
         return event.preventDefault();
       };
+      return this.$searchField.on('keyup', this.doSearch);
     },
     addFolder: function(event) {
       var folder;
@@ -77,6 +80,28 @@
         folder_id: -1,
         id: false
       });
+    },
+    doSearch: function() {
+      var note, searchedNotes, value, _i, _len, _results;
+
+      value = this.$searchField.val();
+      app.Router.navigate('search', {
+        trigger: true
+      });
+      if (value === '') {
+        app.AppEvent.trigger('show:notes');
+      } else {
+        app.AppEvent.trigger('hide:notes');
+        searchedNotes = app.Collection.Notes.filter(function(note) {
+          return !!note.get('title').match(value || !!note.get('body').match(value));
+        });
+        _results = [];
+        for (_i = 0, _len = searchedNotes.length; _i < _len; _i++) {
+          note = searchedNotes[_i];
+          _results.push(note.view.show());
+        }
+        return _results;
+      }
     }
   });
 

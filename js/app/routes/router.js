@@ -8,7 +8,8 @@
     routes: {
       'folder/:id': 'folder',
       'note/:id': 'note',
-      '': 'all'
+      '': 'all',
+      'search': 'search'
     },
     folder: function(folderId) {
       var folderNotes, note, _i, _len, _results;
@@ -32,7 +33,8 @@
     },
     all: function() {
       return app.AppEvent.trigger('show:notes');
-    }
+    },
+    search: function() {}
   });
 
   app.Router = new Router;

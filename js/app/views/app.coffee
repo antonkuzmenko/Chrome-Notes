@@ -11,6 +11,8 @@ app.View.App = Backbone.View.extend
       form: document.note_form
       $newButton: $ '#new-note'
 
+  $searchField: $ '#search'
+
   Templates:
     noteForm: app.Template.Note.noteForm
 
@@ -21,6 +23,7 @@ app.View.App = Backbone.View.extend
     @focusFolderTitle = _.bind @focusFolderTitle, this
     @focusNoteTitle = _.bind @focusNoteTitle, this
     @renderNoteForm = _.bind @renderNoteForm, this
+    @doSearch = _.bind @doSearch, this
 
     @clearFolder = _.bind @clearFolder, this
 
@@ -39,6 +42,9 @@ app.View.App = Backbone.View.extend
     @Forms.Note.$newButton.on 'click', @renderNoteForm
 
     @Forms.Note.form.onsubmit = (event) -> event.preventDefault()
+
+    @$searchField.on 'keyup', @doSearch
+
 
   addFolder: (event) ->
     if event.type is 'keyup' and event.which isnt 13 then return
@@ -78,3 +84,17 @@ app.View.App = Backbone.View.extend
       folders: app.Collection.Folders.toJSON()
       folder_id: -1
       id: false
+
+  doSearch: ->
+    value = @$searchField.val()
+    app.Router.navigate 'search', trigger: true
+
+    if value is ''
+      app.AppEvent.trigger 'show:notes'
+      return
+    else
+      app.AppEvent.trigger 'hide:notes'
+      searchedNotes = app.Collection.Notes.filter (note) ->
+        !!note.get('title').match value or !!note.get('body').match value
+
+      note.view.show() for note in searchedNotes
