@@ -29,7 +29,7 @@ Folder = Backbone.Model.extend
     Backbone.Model::save.apply @, arguments
 
   destroyNotes: ->
-    note.collection.remove(note) for note in @rel 'notes'
+    app.Collection.Notes.bulkRemove @rel('notes')
 
 Folder::hasMany = ->
   notes:

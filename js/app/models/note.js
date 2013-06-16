@@ -25,7 +25,6 @@
     },
     listenEvents: function() {
       return this.on('remove', function() {
-        this.destroy();
         return this.clear();
       }, this);
     }

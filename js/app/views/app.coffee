@@ -95,6 +95,6 @@ app.View.App = Backbone.View.extend
     else
       app.AppEvent.trigger 'hide:notes'
       searchedNotes = app.Collection.Notes.filter (note) ->
-        !!note.get('title').match value or !!note.get('body').match value
+        !!note.get('title').match(new RegExp(value, 'i')) || !!note.get('body').match(new RegExp(value, 'i'))
 
       note.view.show() for note in searchedNotes

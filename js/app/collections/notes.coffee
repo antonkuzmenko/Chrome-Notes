@@ -11,4 +11,19 @@ Notes = Backbone.Collection.extend
 
     @fetch()
 
+  bulkRemove: (notesToDelete) ->
+    storage = chrome.storage.local
+    noteIdsToDelete = _.pluck(notesToDelete, 'id')
+
+    for id in noteIdsToDelete
+      modelId = "#{@type}-#{id}"
+      storage.remove modelId
+
+    note.trigger 'remove' for note in notesToDelete
+
+    storage.get @type, (ids) ->
+      ids['note'] = _.filter(ids['note'], (id) -> id not in noteIdsToDelete)
+      storage.set ids
+
+
 app.Collection.Notes = new Notes

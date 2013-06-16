@@ -42,7 +42,7 @@
       if (+event.target.dataset.id !== +this.model.id) {
         return;
       }
-      this.model.collection.remove(this.model);
+      this.model.destroy();
       this.$confirmModalForm.modal('hide');
       return this;
     },

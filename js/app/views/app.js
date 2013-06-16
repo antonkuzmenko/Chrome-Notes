@@ -93,7 +93,7 @@
       } else {
         app.AppEvent.trigger('hide:notes');
         searchedNotes = app.Collection.Notes.filter(function(note) {
-          return !!note.get('title').match(value || !!note.get('body').match(value));
+          return !!note.get('title').match(new RegExp(value, 'i')) || !!note.get('body').match(new RegExp(value, 'i'));
         });
         _results = [];
         for (_i = 0, _len = searchedNotes.length; _i < _len; _i++) {

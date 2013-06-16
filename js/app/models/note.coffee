@@ -14,7 +14,6 @@ Note = Backbone.Model.extend
 
   listenEvents: ->
     @on 'remove', ->
-      @destroy()
       @clear()
     , @
 

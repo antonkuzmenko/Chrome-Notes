@@ -49,15 +49,7 @@
       return Backbone.Model.prototype.save.apply(this, arguments);
     },
     destroyNotes: function() {
-      var note, _i, _len, _ref, _results;
-
-      _ref = this.rel('notes');
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        note = _ref[_i];
-        _results.push(note.collection.remove(note));
-      }
-      return _results;
+      return app.Collection.Notes.bulkRemove(this.rel('notes'));
     }
   });
 

@@ -1,3 +1,4 @@
+# Создание неймспейсов
 window.app =
   Model: {}
   Collection: {}
@@ -8,7 +9,7 @@ window.app =
     Note: {}
   AppEvent: _.extend {}, Backbone.Events
 
-# Iterator factory.
+# Фабрика итераторов.
 iterator = do ->
   ->
     i = 0
@@ -16,35 +17,36 @@ iterator = do ->
     get: -> i
     set: (newI) -> i = newI
 
-# Separate iterators for folders and notes.
+# Отдельный итератор для папок и заметок.
 window.app.Iterator.folder = iterator()
 window.app.Iterator.note = iterator()
 
-# Add unique identifier to the model attributes.
-# Used in views and sync with the server.
+# Добавляем в сериализованную модель id
 Backbone.Model::toJSON = ->
   _.extend {}, _.clone(@attributes), id: @id ? @cid
 
-# Use Chromes local storage as a main data storage.
+# Внедряем Chromes local storage в Backbone,
+# делая storage местом хранения заметок и папок.
 Backbone.sync = (method, model, options) ->
   modelId = "#{model.type}-#{model.id}"
   id = model.id
   storage = chrome.storage.local
 
   switch method
+# Создание, обновление записи
     when 'create', 'update', 'patch'
-      # Save model.
+# Сохранение модели.
       data = {}
       data[modelId] = options.attrs ? model.toJSON options
       storage.set data, ->
         errorMsg = chrome.runtime.lastError?.message
-        # Notify about occured error.
+# Notify about occured error.
         if errorMsg?
           options.error errorMsg
         else
-          # Notify about success.
+# Сообщить о успешно проделанной операции.
           options.success data[modelId]
-          # Save model id.
+# Сохранить id модели.
           storage.get model.type, (identifiers) ->
             identifiers[model.type] = [] if not identifiers[model.type]?
             ids = identifiers[model.type]
@@ -53,18 +55,19 @@ Backbone.sync = (method, model, options) ->
               ids.push model.id
               storage.set identifiers
 
+# Удаление записи
     when 'delete'
-      # Remove model.
+# Удаение модели.
       storage.remove modelId, ->
         errorMsg = chrome.runtime.lastError?.message
 
         if errorMsg?
-          # Notify about occured error.
+# Сообщить об ошибке.
           options.error errorMsg
         else
-          # Notify about success.
+# Сообщить о успешно проделанной операции.
           options.success 'ok';
-          # Delete model id.
+# Удалить id модели.
           storage.get model.type, (identifiers) ->
             ids = identifiers[model.type]
             deletedIndex = ids.indexOf id
@@ -74,15 +77,15 @@ Backbone.sync = (method, model, options) ->
               storage.set identifiers
 
     when 'read'
-      # Retrieve models ids
+# Выборка id-шников
       storage.get model.type, (modelIds) ->
         errorMsg = chrome.runtime.lastError?.message
 
         if errorMsg?
-          # Notify about occured error.
+# Сообщить об ошибке.
           options.error errorMsg
         else
-          # Notify about success.
+# Сообщить о успешно проделанной операции.
           if _.isEmpty modelIds then return
 
           models = []
@@ -91,13 +94,12 @@ Backbone.sync = (method, model, options) ->
             do (id) ->
               storage.get model.type + '-' + id, (data) ->
                 models.push(data[model.type + '-' + id])
-
+# Передаем модели
                 if modelsLen is models.length
                   options.success models
 
           return
 
-
-#  Trigger native Backbones request event with params. (model, xhr, options)
+# Запускаем событие request, для корректной работы Backbone
   model.trigger 'request', model, {}, options
   null

@@ -43,8 +43,7 @@ app.View.Note = Backbone.View.extend
   destroy: (event) ->
     if +event.target.dataset.id isnt +@model.id then return
 
-    @model.collection.remove @model
-
+    @model.destroy()
     @$confirmModalForm.modal 'hide'
     @
 
